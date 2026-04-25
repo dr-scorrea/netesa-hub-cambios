@@ -187,7 +187,7 @@ const Leads = () => {
                       </a>
                     </Button>
                   </div>
-                  <ChevronRight className="h-4 w-4 text-muted-foreground transition-base group-hover:translate-x-0.5 group-hover:text-foreground" />
+                  
                 </div>
               ))}
             </div>
