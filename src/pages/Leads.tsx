@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Plus, Users, Filter, Mail, Phone, ChevronRight } from "lucide-react";
+import { Search, Plus, Users, Filter, Mail, Phone } from "lucide-react";
 import { LEADS, type Lead, formatCurrency, STATUS_LABEL } from "@/data/crm";
 import { APPS } from "@/data/apps";
 import { useAppContext } from "@/context/AppContext";
@@ -187,7 +187,7 @@ const Leads = () => {
                       </a>
                     </Button>
                   </div>
-                  <ChevronRight className="h-4 w-4 text-muted-foreground transition-base group-hover:translate-x-0.5 group-hover:text-foreground" />
+                  
                 </div>
               ))}
             </div>
