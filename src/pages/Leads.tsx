@@ -4,8 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Search, Plus, Users, Filter, Mail, Phone } from "lucide-react";
+import { Search, Plus, Users, Filter, Mail, Phone, ChevronRight } from "lucide-react";
 import { LEADS, type Lead, formatCurrency, STATUS_LABEL } from "@/data/crm";
 import { APPS } from "@/data/apps";
 import { useAppContext } from "@/context/AppContext";
@@ -83,8 +82,8 @@ const Leads = () => {
       />
 
       <Card className="border-border bg-card shadow-card">
-        <CardContent className="p-4">
-          <div className="flex flex-wrap items-center gap-2">
+        <CardContent className="p-0">
+          <div className="flex flex-wrap items-center gap-2 border-b border-border p-4">
             <div className="relative flex-1 min-w-[220px]">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
@@ -136,66 +135,65 @@ const Leads = () => {
             </Button>
           </div>
 
-          <div className="mt-4 overflow-hidden rounded-lg border border-border">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-muted/40 hover:bg-muted/40">
-                  <TableHead className="w-[260px]">Lead</TableHead>
-                  <TableHead>App</TableHead>
-                  <TableHead>Estado</TableHead>
-                  <TableHead>Prioridad</TableHead>
-                  <TableHead className="text-right">Valor estimado</TableHead>
-                  <TableHead>Owner</TableHead>
-                  <TableHead className="text-right">Contacto</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filtered.length === 0 && (
-                  <TableRow>
-                    <TableCell colSpan={7} className="py-12 text-center text-sm text-muted-foreground">
-                      No hay leads que coincidan con los filtros.
-                    </TableCell>
-                  </TableRow>
-                )}
-                {filtered.map((l) => (
-                  <TableRow key={l.id} className="transition-base hover:bg-accent/30">
-                    <TableCell>
-                      <div className="font-semibold leading-tight">{l.fullName}</div>
-                      <div className="text-xs text-muted-foreground">{l.company}</div>
-                    </TableCell>
-                    <TableCell>
-                      <AppBadge appId={l.appId} size="xs" />
-                    </TableCell>
-                    <TableCell>
+          {filtered.length === 0 ? (
+            <div className="py-16 text-center text-sm text-muted-foreground">
+              No hay leads que coincidan con los filtros.
+            </div>
+          ) : (
+            <div className="divide-y divide-border">
+              {filtered.map((l) => (
+                <div
+                  key={l.id}
+                  className="group flex w-full items-center gap-4 px-4 py-3 transition-base hover:bg-accent/40"
+                >
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-primary text-sm font-bold text-primary-foreground shadow-glow">
+                    {l.fullName
+                      .split(" ")
+                      .map((p) => p[0])
+                      .slice(0, 2)
+                      .join("")
+                      .toUpperCase()}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="truncate font-semibold">{l.fullName}</span>
                       <StatusBadge status={l.status} />
-                    </TableCell>
-                    <TableCell>
-                      <span className={cn("text-xs font-semibold uppercase", PRIORITY_COLOR[l.priority])}>● {l.priority}</span>
-                    </TableCell>
-                    <TableCell className="text-right font-medium tabular-nums">
+                      <span className={cn("text-[10px] font-semibold uppercase tracking-wider", PRIORITY_COLOR[l.priority])}>
+                        ● {l.priority}
+                      </span>
+                    </div>
+                    <p className="truncate text-xs text-muted-foreground">
+                      {l.company} · {l.email} · Owner: {l.owner}
+                    </p>
+                    <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                      <AppBadge appId={l.appId} size="sm" />
+                    </div>
+                  </div>
+                  <div className="hidden text-right sm:block">
+                    <p className="text-sm font-semibold tabular-nums">
                       {formatCurrency(l.estimatedValue, l.currency)}
-                    </TableCell>
-                    <TableCell className="text-sm">{l.owner}</TableCell>
-                    <TableCell>
-                      <div className="flex justify-end gap-1">
-                        <Button size="icon" variant="ghost" className="h-8 w-8" asChild>
-                          <a href={`mailto:${l.email}`} aria-label="Email">
-                            <Mail className="h-4 w-4" />
-                          </a>
-                        </Button>
-                        <Button size="icon" variant="ghost" className="h-8 w-8" asChild>
-                          <a href={`tel:${l.phone}`} aria-label="Llamar">
-                            <Phone className="h-4 w-4" />
-                          </a>
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-          <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
+                    </p>
+                    <p className="text-xs text-muted-foreground">Valor estimado</p>
+                  </div>
+                  <div className="hidden gap-1 md:flex">
+                    <Button size="icon" variant="ghost" className="h-8 w-8" asChild>
+                      <a href={`mailto:${l.email}`} aria-label="Email">
+                        <Mail className="h-4 w-4" />
+                      </a>
+                    </Button>
+                    <Button size="icon" variant="ghost" className="h-8 w-8" asChild>
+                      <a href={`tel:${l.phone}`} aria-label="Llamar">
+                        <Phone className="h-4 w-4" />
+                      </a>
+                    </Button>
+                  </div>
+                  <ChevronRight className="h-4 w-4 text-muted-foreground transition-base group-hover:translate-x-0.5 group-hover:text-foreground" />
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="flex items-center justify-between border-t border-border px-4 py-3 text-xs text-muted-foreground">
             <span>
               Mostrando <strong className="text-foreground">{filtered.length}</strong> de {leads.length} leads
             </span>
