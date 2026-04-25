@@ -278,113 +278,100 @@ export default function Finanzas() {
               </Select>
             </div>
 
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Proveedor</TableHead>
-                    <TableHead>Documento</TableHead>
-                    <TableHead>Fecha</TableHead>
-                    <TableHead className="text-right">Total</TableHead>
-                    <TableHead>Estado</TableHead>
-                    <TableHead className="w-12" />
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filtered.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={6} className="py-12 text-center text-sm text-muted-foreground">
-                        {periodFacturas.length === 0
-                          ? `Sin facturas en ${periodLabel}. Sube comprobantes o cambia el periodo.`
-                          : "Ningún resultado para los filtros aplicados."}
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    filtered.map((f) => (
-                      <TableRow key={f.id} className="group">
-                        <TableCell>
-                          <div className="flex flex-col">
-                            <span className="font-medium">{f.proveedor}</span>
-                            <span className="text-xs text-muted-foreground">RUC {f.ruc}</span>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex flex-col">
-                            <span className="font-mono text-xs">{f.numDocumento}</span>
-                            <span className="text-xs text-muted-foreground">{f.categoria}</span>
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-sm">{formatDate(f.fechaEmision)}</TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex flex-col items-end">
-                            <span className="font-semibold tabular-nums">
-                              {formatMoney(f.total, f.moneda)}
-                            </span>
-                            <span className="text-xs text-muted-foreground tabular-nums">
-                              IGV {formatMoney(f.igv, f.moneda)}
-                            </span>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <FacturaStatusBadge estado={f.estado} />
-                        </TableCell>
-                        <TableCell>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon" className="h-8 w-8">
-                                <MoreHorizontal className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-52">
-                              <DropdownMenuItem onClick={() => setEditing(f)}>
-                                <Eye className="h-4 w-4" />
-                                Ver / editar
-                              </DropdownMenuItem>
-                              <DropdownMenuSeparator />
-                              {f.estado === "pendiente" && (
-                                <>
-                                  <DropdownMenuItem onClick={() => handleAprobar(f)}>
-                                    <CheckCircle2 className="h-4 w-4" />
-                                    Aprobar pago
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem
-                                    onClick={() => handleRechazar(f)}
-                                    className="text-destructive focus:text-destructive"
-                                  >
-                                    <XCircle className="h-4 w-4" />
-                                    Rechazar
-                                  </DropdownMenuItem>
-                                </>
-                              )}
-                              {f.estado === "aprobada" && (
-                                <DropdownMenuItem onClick={() => handlePagar(f)}>
-                                  <Banknote className="h-4 w-4" />
-                                  Marcar como pagada
-                                </DropdownMenuItem>
-                              )}
-                              {(f.estado === "revision" || f.estado === "extraccion") && (
-                                <DropdownMenuItem onClick={() => setEditing(f)}>
-                                  <CheckCircle2 className="h-4 w-4" />
-                                  Validar y enviar
-                                </DropdownMenuItem>
-                              )}
-                              <DropdownMenuSeparator />
-                              <DropdownMenuItem
-                                onClick={() => removeFactura(f.id)}
-                                className="text-destructive focus:text-destructive"
-                              >
-                                <Trash2 className="h-4 w-4" />
-                                Eliminar
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  )}
-                </TableBody>
-              </Table>
-            </div>
+            {filtered.length === 0 ? (
+              <div className="py-12 text-center text-sm text-muted-foreground">
+                {periodFacturas.length === 0
+                  ? `Sin facturas en ${periodLabel}. Sube comprobantes o cambia el periodo.`
+                  : "Ningún resultado para los filtros aplicados."}
+              </div>
+            ) : (
+              <div className="divide-y divide-border">
+                {filtered.map((f) => (
+                  <div
+                    key={f.id}
+                    className="group flex w-full items-center gap-4 px-4 py-3 transition-base hover:bg-accent/40"
+                  >
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-primary text-sm font-bold text-primary-foreground shadow-glow">
+                      {f.proveedor.slice(0, 2).toUpperCase()}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="truncate font-semibold">{f.proveedor}</span>
+                        <FacturaStatusBadge estado={f.estado} />
+                        {f.leidoPorIA && (
+                          <span className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
+                            <Sparkles className="h-2.5 w-2.5" /> IA
+                          </span>
+                        )}
+                      </div>
+                      <p className="truncate text-xs text-muted-foreground">
+                        RUC {f.ruc} · <span className="font-mono">{f.numDocumento}</span> · {f.categoria}
+                      </p>
+                      <p className="mt-0.5 text-xs text-muted-foreground">
+                        Emitida {formatDate(f.fechaEmision)}
+                      </p>
+                    </div>
+                    <div className="hidden text-right sm:block">
+                      <p className="text-sm font-semibold tabular-nums">
+                        {formatMoney(f.total, f.moneda)}
+                      </p>
+                      <p className="text-xs text-muted-foreground tabular-nums">
+                        IGV {formatMoney(f.igv, f.moneda)}
+                      </p>
+                    </div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-52">
+                        <DropdownMenuItem onClick={() => setEditing(f)}>
+                          <Eye className="h-4 w-4" />
+                          Ver / editar
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        {f.estado === "pendiente" && (
+                          <>
+                            <DropdownMenuItem onClick={() => handleAprobar(f)}>
+                              <CheckCircle2 className="h-4 w-4" />
+                              Aprobar pago
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => handleRechazar(f)}
+                              className="text-destructive focus:text-destructive"
+                            >
+                              <XCircle className="h-4 w-4" />
+                              Rechazar
+                            </DropdownMenuItem>
+                          </>
+                        )}
+                        {f.estado === "aprobada" && (
+                          <DropdownMenuItem onClick={() => handlePagar(f)}>
+                            <Banknote className="h-4 w-4" />
+                            Marcar como pagada
+                          </DropdownMenuItem>
+                        )}
+                        {(f.estado === "revision" || f.estado === "extraccion") && (
+                          <DropdownMenuItem onClick={() => setEditing(f)}>
+                            <CheckCircle2 className="h-4 w-4" />
+                            Validar y enviar
+                          </DropdownMenuItem>
+                        )}
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          onClick={() => removeFactura(f.id)}
+                          className="text-destructive focus:text-destructive"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                          Eliminar
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                ))}
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
