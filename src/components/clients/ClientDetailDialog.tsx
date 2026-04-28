@@ -31,6 +31,7 @@ import { useClients } from "@/context/ClientsContext";
 import { COUNTRY_LABEL, type Client, type Subscription } from "@/data/clients";
 import { PLANS, formatCurrency } from "@/data/crm";
 import { toast } from "@/hooks/use-toast";
+import { ConfirmDeleteDialog } from "@/components/shared/ConfirmDeleteDialog";
 
 export function ClientDetailDialog({
   client,
@@ -45,6 +46,7 @@ export function ClientDetailDialog({
   const [tab, setTab] = useState<"info" | "subs" | "edit">("subs");
   const [editingSub, setEditingSub] = useState<Subscription | null>(null);
   const [showSubForm, setShowSubForm] = useState(false);
+  const [subToDelete, setSubToDelete] = useState<Subscription | null>(null);
 
   const clientSubs = useMemo(
     () => (client ? subscriptions.filter((s) => s.clientId === client.id) : []),
@@ -77,11 +79,11 @@ export function ClientDetailDialog({
   };
 
   const handleSubRemove = (s: Subscription) => {
-    removeSubscription(s.id);
-    toast({ title: "Suscripción eliminada", description: s.id, variant: "destructive" });
+    setSubToDelete(s);
   };
 
   return (
+    <>
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto">
         <DialogHeader>
@@ -268,6 +270,25 @@ export function ClientDetailDialog({
         </Tabs>
       </DialogContent>
     </Dialog>
+
+    <ConfirmDeleteDialog
+      open={!!subToDelete}
+      onOpenChange={(o) => !o && setSubToDelete(null)}
+      title="¿Eliminar suscripción?"
+      itemName={
+        subToDelete
+          ? `${PLANS.find((p) => p.id === subToDelete.planId)?.name ?? subToDelete.planId} (${subToDelete.id})`
+          : undefined
+      }
+      onConfirm={() => {
+        if (subToDelete) {
+          removeSubscription(subToDelete.id);
+          toast({ title: "Suscripción eliminada", description: subToDelete.id, variant: "destructive" });
+        }
+        setSubToDelete(null);
+      }}
+    />
+    </>
   );
 }
 

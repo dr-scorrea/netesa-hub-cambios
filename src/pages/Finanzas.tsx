@@ -35,6 +35,7 @@ import { useFinanzas } from "@/context/FinanzasContext";
 import { exportFacturasToExcel } from "@/lib/exportFacturas";
 import type { Factura, FacturaEstado } from "@/data/finanzas";
 import { toast } from "@/hooks/use-toast";
+import { ConfirmDeleteDialog } from "@/components/shared/ConfirmDeleteDialog";
 
 const formatMoney = (v: number, m: string) =>
   new Intl.NumberFormat("es-PE", { style: "currency", currency: m, minimumFractionDigits: 2 }).format(v);
@@ -52,6 +53,7 @@ export default function Finanzas() {
   const [search, setSearch] = useState("");
   const [filterEstado, setFilterEstado] = useState<FacturaEstado | "all">("all");
   const [editing, setEditing] = useState<Factura | null>(null);
+  const [toDelete, setToDelete] = useState<Factura | null>(null);
   const now = new Date();
   const [periodMonth, setPeriodMonth] = useState<number>(now.getMonth());
   const [periodYear, setPeriodYear] = useState<number>(now.getFullYear());
@@ -360,7 +362,7 @@ export default function Finanzas() {
                         )}
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
-                          onClick={() => removeFactura(f.id)}
+                          onClick={() => setToDelete(f)}
                           className="text-destructive focus:text-destructive"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -377,6 +379,20 @@ export default function Finanzas() {
       </div>
 
       <FacturaEditDialog factura={editing} open={!!editing} onOpenChange={(o) => !o && setEditing(null)} />
+
+      <ConfirmDeleteDialog
+        open={!!toDelete}
+        onOpenChange={(o) => !o && setToDelete(null)}
+        title="¿Eliminar factura?"
+        itemName={toDelete ? `${toDelete.proveedor} · ${toDelete.numDocumento}` : undefined}
+        onConfirm={() => {
+          if (toDelete) {
+            removeFactura(toDelete.id);
+            toast({ title: "Factura eliminada", description: toDelete.numDocumento, variant: "destructive" });
+          }
+          setToDelete(null);
+        }}
+      />
     </>
   );
 }
