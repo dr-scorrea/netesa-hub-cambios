@@ -11,6 +11,7 @@ import Planes from "./pages/Planes";
 import Propuestas from "./pages/Propuestas";
 import Pipeline from "./pages/Pipeline";
 import Finanzas from "./pages/Finanzas";
+import Usuarios from "./pages/Usuarios";
 import Clientes from "./pages/Clientes";
 import ClienteConfig from "./pages/ClienteConfig";
 import ContactoForm from "./pages/ContactoForm";
@@ -37,6 +38,7 @@ const App = () => (
             <Route path="/apps" element={<Apps />} />
             <Route path="/planes" element={<Planes />} />
             <Route path="/finanzas" element={<Finanzas />} />
+            <Route path="/usuarios" element={<Usuarios />} />
             <Route path="/clientes" element={<Clientes />} />
             <Route path="/clientes/:id/configuracion" element={<ClienteConfig />} />
             <Route path="/clientes/:id/contactos/nuevo" element={<ContactoForm />} />

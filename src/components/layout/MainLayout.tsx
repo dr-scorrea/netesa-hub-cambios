@@ -4,12 +4,14 @@ import { Topbar } from "./Topbar";
 import { AppContextProvider } from "@/context/AppContext";
 import { FinanzasProvider } from "@/context/FinanzasContext";
 import { ClientsProvider } from "@/context/ClientsContext";
+import { UsersProvider } from "@/context/UsersContext";
 import { Outlet } from "react-router-dom";
 
 export function MainLayout() {
   return (
     <AppContextProvider>
       <ClientsProvider>
+        <UsersProvider>
         <FinanzasProvider>
           <SidebarProvider>
             <div className="flex min-h-screen w-full bg-gradient-subtle">
@@ -25,6 +27,7 @@ export function MainLayout() {
             </div>
           </SidebarProvider>
         </FinanzasProvider>
+        </UsersProvider>
       </ClientsProvider>
     </AppContextProvider>
   );
