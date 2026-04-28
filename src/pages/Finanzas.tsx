@@ -378,6 +378,20 @@ export default function Finanzas() {
       </div>
 
       <FacturaEditDialog factura={editing} open={!!editing} onOpenChange={(o) => !o && setEditing(null)} />
+
+      <ConfirmDeleteDialog
+        open={!!toDelete}
+        onOpenChange={(o) => !o && setToDelete(null)}
+        title="¿Eliminar factura?"
+        itemName={toDelete ? `${toDelete.proveedor} · ${toDelete.numero ?? toDelete.id}` : undefined}
+        onConfirm={() => {
+          if (toDelete) {
+            removeFactura(toDelete.id);
+            toast({ title: "Factura eliminada", description: toDelete.numero ?? toDelete.id, variant: "destructive" });
+          }
+          setToDelete(null);
+        }}
+      />
     </>
   );
 }
