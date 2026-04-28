@@ -201,9 +201,9 @@ export default function Clientes() {
                         e.stopPropagation();
                         navigate(`/clientes/${c.id}/configuracion`);
                       }}
-                      className="hidden items-center gap-1 rounded-lg border border-border bg-background px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-base hover:border-primary/40 hover:text-primary md:inline-flex"
+                      className="inline-flex shrink-0 items-center gap-1 rounded-lg border border-border bg-background px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-base hover:border-primary/40 hover:text-primary"
                     >
-                      <Settings className="h-3.5 w-3.5" /> Configurar
+                      <Settings className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Configurar</span>
                     </span>
                     <ChevronRight className="h-4 w-4 text-muted-foreground transition-base group-hover:translate-x-0.5 group-hover:text-foreground" />
                   </button>
