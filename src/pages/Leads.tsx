@@ -175,7 +175,7 @@ const Leads = () => {
                     </p>
                     <p className="text-xs text-muted-foreground">Valor estimado</p>
                   </div>
-                  <div className="hidden gap-1 md:flex">
+                  <div className="flex shrink-0 gap-1">
                     <Button size="icon" variant="ghost" className="h-8 w-8" asChild>
                       <a href={`mailto:${l.email}`} aria-label="Email">
                         <Mail className="h-4 w-4" />
