@@ -83,6 +83,7 @@ export function ClientDetailDialog({
   };
 
   return (
+    <>
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto">
         <DialogHeader>
@@ -269,6 +270,25 @@ export function ClientDetailDialog({
         </Tabs>
       </DialogContent>
     </Dialog>
+
+    <ConfirmDeleteDialog
+      open={!!subToDelete}
+      onOpenChange={(o) => !o && setSubToDelete(null)}
+      title="¿Eliminar suscripción?"
+      itemName={
+        subToDelete
+          ? `${PLANS.find((p) => p.id === subToDelete.planId)?.name ?? subToDelete.planId} (${subToDelete.id})`
+          : undefined
+      }
+      onConfirm={() => {
+        if (subToDelete) {
+          removeSubscription(subToDelete.id);
+          toast({ title: "Suscripción eliminada", description: subToDelete.id, variant: "destructive" });
+        }
+        setSubToDelete(null);
+      }}
+    />
+    </>
   );
 }
 
