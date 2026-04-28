@@ -168,7 +168,7 @@ export default function Usuarios() {
                         {u.jobTitle ? `${u.jobTitle} · ` : ""}{u.department} · {u.email}
                       </p>
                     </div>
-                    <div className="hidden items-center gap-1 sm:flex">
+                    <div className="flex shrink-0 items-center gap-1">
                       <a
                         href={`mailto:${u.email}`}
                         className="flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-base hover:bg-accent hover:text-foreground"
