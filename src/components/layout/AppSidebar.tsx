@@ -20,6 +20,7 @@ import {
   Settings,
   Building2,
   Wallet,
+  UserCog,
 } from "lucide-react";
 import { useAppContext } from "@/context/AppContext";
 import { APPS } from "@/data/apps";
@@ -40,6 +41,7 @@ const productNav = [
 
 const finanzasNav = [
   { title: "Finanzas Netesa", url: "/finanzas", icon: Wallet },
+  { title: "Usuarios", url: "/usuarios", icon: UserCog },
 ];
 
 const adminNav = [
