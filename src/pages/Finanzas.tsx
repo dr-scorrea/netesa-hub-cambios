@@ -52,6 +52,7 @@ export default function Finanzas() {
   const [search, setSearch] = useState("");
   const [filterEstado, setFilterEstado] = useState<FacturaEstado | "all">("all");
   const [editing, setEditing] = useState<Factura | null>(null);
+  const [toDelete, setToDelete] = useState<Factura | null>(null);
   const now = new Date();
   const [periodMonth, setPeriodMonth] = useState<number>(now.getMonth());
   const [periodYear, setPeriodYear] = useState<number>(now.getFullYear());
@@ -360,7 +361,7 @@ export default function Finanzas() {
                         )}
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
-                          onClick={() => removeFactura(f.id)}
+                          onClick={() => setToDelete(f)}
                           className="text-destructive focus:text-destructive"
                         >
                           <Trash2 className="h-4 w-4" />
