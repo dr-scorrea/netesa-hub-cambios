@@ -15,7 +15,7 @@ export function Topbar() {
         <div className="flex h-8 w-8 items-center justify-center rounded-md bg-gradient-primary text-primary-foreground shadow-glow">
           <span className="text-sm font-bold">N</span>
         </div>
-        <span className="hidden text-base font-semibold tracking-tight md:inline">ERP Netesa</span>
+        <span className="text-base font-semibold tracking-tight inline">ERP Netesa</span>
       </div>
       <div className="ml-2 hidden md:block">
         <AppSwitcher />
