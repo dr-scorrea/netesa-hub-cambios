@@ -35,6 +35,7 @@ import { useFinanzas } from "@/context/FinanzasContext";
 import { exportFacturasToExcel } from "@/lib/exportFacturas";
 import type { Factura, FacturaEstado } from "@/data/finanzas";
 import { toast } from "@/hooks/use-toast";
+import { ConfirmDeleteDialog } from "@/components/shared/ConfirmDeleteDialog";
 
 const formatMoney = (v: number, m: string) =>
   new Intl.NumberFormat("es-PE", { style: "currency", currency: m, minimumFractionDigits: 2 }).format(v);
@@ -383,11 +384,11 @@ export default function Finanzas() {
         open={!!toDelete}
         onOpenChange={(o) => !o && setToDelete(null)}
         title="¿Eliminar factura?"
-        itemName={toDelete ? `${toDelete.proveedor} · ${toDelete.numero ?? toDelete.id}` : undefined}
+        itemName={toDelete ? `${toDelete.proveedor} · ${toDelete.numDocumento}` : undefined}
         onConfirm={() => {
           if (toDelete) {
             removeFactura(toDelete.id);
-            toast({ title: "Factura eliminada", description: toDelete.numero ?? toDelete.id, variant: "destructive" });
+            toast({ title: "Factura eliminada", description: toDelete.numDocumento, variant: "destructive" });
           }
           setToDelete(null);
         }}
