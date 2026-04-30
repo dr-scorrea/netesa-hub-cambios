@@ -215,41 +215,45 @@ export default function Usuarios() {
       </Card>
 
       <Dialog open={showCreate} onOpenChange={setShowCreate}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
+        <DialogContent className="flex max-h-[90vh] w-[calc(100%-2rem)] flex-col gap-0 overflow-hidden p-0 sm:max-w-2xl">
+          <DialogHeader className="shrink-0 border-b border-border p-6">
             <DialogTitle>Nuevo usuario</DialogTitle>
             <DialogDescription>
               Invita a un miembro del equipo. Recibirá un correo para activar su cuenta.
             </DialogDescription>
           </DialogHeader>
-          <UserForm
-            onSubmit={(data) => {
-              const id = `USR-${String(Date.now()).slice(-4)}`;
-              addUser({ ...data, id, createdAt: new Date().toISOString() });
-              toast({ title: "Usuario creado", description: data.fullName });
-              setShowCreate(false);
-            }}
-            onCancel={() => setShowCreate(false)}
-          />
+          <div className="flex-1 overflow-y-auto p-6">
+            <UserForm
+              onSubmit={(data) => {
+                const id = `USR-${String(Date.now()).slice(-4)}`;
+                addUser({ ...data, id, createdAt: new Date().toISOString() });
+                toast({ title: "Usuario creado", description: data.fullName });
+                setShowCreate(false);
+              }}
+              onCancel={() => setShowCreate(false)}
+            />
+          </div>
         </DialogContent>
       </Dialog>
 
       <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
+        <DialogContent className="flex max-h-[90vh] w-[calc(100%-2rem)] flex-col gap-0 overflow-hidden p-0 sm:max-w-2xl">
+          <DialogHeader className="shrink-0 border-b border-border p-6">
             <DialogTitle>Editar usuario</DialogTitle>
             <DialogDescription>Actualiza los datos y permisos del usuario.</DialogDescription>
           </DialogHeader>
           {editing && (
-            <UserForm
-              initial={editing}
-              onSubmit={(data) => {
-                updateUser(editing.id, data);
-                toast({ title: "Usuario actualizado", description: data.fullName });
-                setEditing(null);
-              }}
-              onCancel={() => setEditing(null)}
-            />
+            <div className="flex-1 overflow-y-auto p-6">
+              <UserForm
+                initial={editing}
+                onSubmit={(data) => {
+                  updateUser(editing.id, data);
+                  toast({ title: "Usuario actualizado", description: data.fullName });
+                  setEditing(null);
+                }}
+                onCancel={() => setEditing(null)}
+              />
+            </div>
           )}
         </DialogContent>
       </Dialog>
