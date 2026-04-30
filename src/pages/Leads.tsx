@@ -70,12 +70,14 @@ const Leads = () => {
                 <Plus className="mr-1.5 h-4 w-4" /> Nuevo lead
               </Button>
             </SheetTrigger>
-            <SheetContent className="w-full sm:max-w-xl">
-              <SheetHeader>
+            <SheetContent className="flex w-full flex-col gap-0 p-0 sm:max-w-xl">
+              <SheetHeader className="shrink-0 border-b border-border p-6">
                 <SheetTitle>Nuevo lead</SheetTitle>
                 <SheetDescription>Asocia el prospecto a una de las Apps del ecosistema.</SheetDescription>
               </SheetHeader>
-              <LeadForm onSubmit={handleCreate} defaultAppId={activeApp !== "all" ? activeApp : undefined} />
+              <div className="flex-1 overflow-y-auto px-6 pb-6">
+                <LeadForm onSubmit={handleCreate} defaultAppId={activeApp !== "all" ? activeApp : undefined} />
+              </div>
             </SheetContent>
           </Sheet>
         }

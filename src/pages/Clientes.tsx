@@ -215,22 +215,24 @@ export default function Clientes() {
       </Card>
 
       <Dialog open={showCreate} onOpenChange={setShowCreate}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
+        <DialogContent className="flex max-h-[90vh] w-[calc(100%-2rem)] flex-col gap-0 overflow-hidden p-0 sm:max-w-2xl">
+          <DialogHeader className="shrink-0 border-b border-border p-6">
             <DialogTitle>Nuevo cliente</DialogTitle>
             <DialogDescription>
               Después de crearlo podrás asignarle suscripciones a las Apps del ecosistema.
             </DialogDescription>
           </DialogHeader>
-          <ClientForm
-            onSubmit={(c) => {
-              const id = `CLT-${String(Date.now()).slice(-4)}`;
-              addClient({ ...(c as Client), id, createdAt: new Date().toISOString() });
-              toast({ title: "Cliente creado", description: c.legalName });
-              setShowCreate(false);
-            }}
-            onCancel={() => setShowCreate(false)}
-          />
+          <div className="flex-1 overflow-y-auto p-6">
+            <ClientForm
+              onSubmit={(c) => {
+                const id = `CLT-${String(Date.now()).slice(-4)}`;
+                addClient({ ...(c as Client), id, createdAt: new Date().toISOString() });
+                toast({ title: "Cliente creado", description: c.legalName });
+                setShowCreate(false);
+              }}
+              onCancel={() => setShowCreate(false)}
+            />
+          </div>
         </DialogContent>
       </Dialog>
 

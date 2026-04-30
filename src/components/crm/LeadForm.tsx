@@ -38,7 +38,7 @@ export function LeadForm({
   };
 
   return (
-    <form onSubmit={submit} className="mt-6 space-y-4">
+    <form onSubmit={submit} className="mt-2 space-y-4">
       <div className="grid grid-cols-2 gap-3">
         <div className="col-span-2 sm:col-span-1">
           <Label>Nombre completo</Label>
