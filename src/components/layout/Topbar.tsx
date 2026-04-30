@@ -1,10 +1,12 @@
-import { Bell, Search, HelpCircle, LogOut } from "lucide-react";
+import { Search, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AppSwitcher } from "./AppSwitcher";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { NotificationsPopover } from "./NotificationsPopover";
+import { HelpPopover } from "./HelpPopover";
 
 export function Topbar() {
   return (
@@ -29,13 +31,8 @@ export function Topbar() {
             className="h-10 w-[280px] rounded-lg border-border bg-background pl-9"
           />
         </div>
-        <Button variant="ghost" size="icon" className="h-10 w-10">
-          <HelpCircle className="h-5 w-5 text-muted-foreground" />
-        </Button>
-        <Button variant="ghost" size="icon" className="relative h-10 w-10">
-          <Bell className="h-5 w-5 text-muted-foreground" />
-          <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-primary" />
-        </Button>
+        <HelpPopover />
+        <NotificationsPopover />
         <Button asChild variant="ghost" size="icon" className="h-10 w-10" title="Cerrar sesión">
           <Link to="/auth">
             <LogOut className="h-5 w-5 text-muted-foreground" />
