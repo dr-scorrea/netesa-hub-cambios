@@ -16,6 +16,7 @@ export function MainLayout() {
         <UsersProvider>
         <FinanzasProvider>
           <ProposalsProvider>
+          <NotificationsProvider>
           <SidebarProvider>
             <div className="flex min-h-screen w-full bg-gradient-subtle">
               <AppSidebar />
@@ -29,6 +30,7 @@ export function MainLayout() {
               </div>
             </div>
           </SidebarProvider>
+          </NotificationsProvider>
           </ProposalsProvider>
         </FinanzasProvider>
         </UsersProvider>
