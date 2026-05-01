@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import {
   BookOpen,
   Sparkles,
-  Keyboard,
   MessageCircle,
   LifeBuoy,
   ArrowRight,
@@ -27,13 +26,6 @@ const SECTIONS = [
     description: "Conoce las últimas mejoras, nuevas funciones y cambios en la plataforma.",
     to: "/ayuda/novedades",
     cta: "Ver novedades",
-  },
-  {
-    icon: Keyboard,
-    title: "Atajos de teclado",
-    description: "Acelera tu trabajo diario con los atajos disponibles en cada módulo.",
-    to: "/ayuda/atajos",
-    cta: "Ver atajos",
   },
   {
     icon: MessageCircle,

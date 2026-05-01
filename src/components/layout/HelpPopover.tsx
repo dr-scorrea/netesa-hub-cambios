@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { HelpCircle, BookOpen, MessageCircle, Keyboard, LifeBuoy, Sparkles, ArrowRight } from "lucide-react";
+import { HelpCircle, BookOpen, MessageCircle, LifeBuoy, Sparkles, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
@@ -16,12 +16,6 @@ const LINKS = [
     title: "Novedades",
     description: "Últimas mejoras y cambios.",
     to: "/ayuda/novedades",
-  },
-  {
-    icon: Keyboard,
-    title: "Atajos de teclado",
-    description: "Acelera tu trabajo diario.",
-    to: "/ayuda/atajos",
   },
   {
     icon: MessageCircle,
