@@ -19,7 +19,7 @@ import Notificaciones from "./pages/Notificaciones";
 import Ayuda from "./pages/Ayuda";
 import CentroAyuda from "./pages/ayuda/CentroAyuda";
 import Novedades from "./pages/ayuda/Novedades";
-import Atajos from "./pages/ayuda/Atajos";
+
 import Soporte from "./pages/ayuda/Soporte";
 import { Configuracion } from "./pages/Placeholder";
 import Login from "./pages/Login";
@@ -53,7 +53,7 @@ const App = () => (
             <Route path="/ayuda" element={<Ayuda />} />
             <Route path="/ayuda/centro" element={<CentroAyuda />} />
             <Route path="/ayuda/novedades" element={<Novedades />} />
-            <Route path="/ayuda/atajos" element={<Atajos />} />
+            
             <Route path="/ayuda/soporte" element={<Soporte />} />
             <Route path="/configuracion" element={<Configuracion />} />
           </Route>
