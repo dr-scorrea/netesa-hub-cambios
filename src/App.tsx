@@ -15,6 +15,7 @@ import Usuarios from "./pages/Usuarios";
 import Clientes from "./pages/Clientes";
 import ClienteConfig from "./pages/ClienteConfig";
 import ContactoForm from "./pages/ContactoForm";
+import Notificaciones from "./pages/Notificaciones";
 import { Configuracion } from "./pages/Placeholder";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound.tsx";
@@ -43,6 +44,7 @@ const App = () => (
             <Route path="/clientes/:id/configuracion" element={<ClienteConfig />} />
             <Route path="/clientes/:id/contactos/nuevo" element={<ContactoForm />} />
             <Route path="/clientes/:id/contactos/:contactoId/editar" element={<ContactoForm />} />
+            <Route path="/notificaciones" element={<Notificaciones />} />
             <Route path="/configuracion" element={<Configuracion />} />
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

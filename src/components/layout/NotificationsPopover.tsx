@@ -1,20 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Bell, FileText, UserPlus, AlertCircle, CheckCircle2, CreditCard, CheckCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
-
-type NotifType = "lead" | "propuesta" | "factura" | "incidente" | "sistema";
-
-type Notification = {
-  id: string;
-  type: NotifType;
-  title: string;
-  description: string;
-  time: string;
-  read: boolean;
-};
+import { useNotifications } from "@/context/NotificationsContext";
+import type { NotifType, Notification } from "@/data/notifications";
 
 const ICONS: Record<NotifType, { icon: typeof Bell; cls: string }> = {
   lead: { icon: UserPlus, cls: "bg-info/15 text-info" },
@@ -24,59 +16,26 @@ const ICONS: Record<NotifType, { icon: typeof Bell; cls: string }> = {
   sistema: { icon: CheckCircle2, cls: "bg-warning/15 text-warning" },
 };
 
-const SEED: Notification[] = [
-  {
-    id: "n1",
-    type: "propuesta",
-    title: "Propuesta aceptada",
-    description: "Valentina Ríos (Fintech Caleta) aceptó la propuesta PR-2002.",
-    time: "Hace 5 min",
-    read: false,
-  },
-  {
-    id: "n2",
-    type: "lead",
-    title: "Nuevo lead asignado",
-    description: "Jorge Salinas (Retail Express) fue asignado a tu pipeline.",
-    time: "Hace 1 h",
-    read: false,
-  },
-  {
-    id: "n3",
-    type: "factura",
-    title: "Factura pagada",
-    description: "Factura F-1043 de Logística Andina marcada como pagada.",
-    time: "Hace 3 h",
-    read: false,
-  },
-  {
-    id: "n4",
-    type: "incidente",
-    title: "Propuesta por vencer",
-    description: "PR-2001 vence en 2 días sin respuesta del cliente.",
-    time: "Ayer",
-    read: true,
-  },
-  {
-    id: "n5",
-    type: "sistema",
-    title: "Nuevo usuario creado",
-    description: "Andrés Vega fue agregado al equipo Comercial.",
-    time: "Hace 2 días",
-    read: true,
-  },
-];
-
 export function NotificationsPopover() {
-  const [items, setItems] = useState<Notification[]>(SEED);
-  const unread = items.filter((i) => !i.read).length;
+  const { items, unread, markOne, markAll } = useNotifications();
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
 
-  const markAll = () => setItems((p) => p.map((n) => ({ ...n, read: true })));
-  const markOne = (id: string) =>
-    setItems((p) => p.map((n) => (n.id === id ? { ...n, read: true } : n)));
+  const handleClick = (n: Notification) => {
+    markOne(n.id);
+    if (n.to) {
+      setOpen(false);
+      navigate(n.to);
+    }
+  };
+
+  const handleSeeAll = () => {
+    setOpen(false);
+    navigate("/notificaciones");
+  };
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button variant="ghost" size="icon" className="relative h-10 w-10" aria-label="Notificaciones">
           <Bell className="h-5 w-5 text-muted-foreground" />
@@ -120,7 +79,7 @@ export function NotificationsPopover() {
                   <li key={n.id}>
                     <button
                       type="button"
-                      onClick={() => markOne(n.id)}
+                      onClick={() => handleClick(n)}
                       className={cn(
                         "flex w-full items-start gap-3 px-4 py-3 text-left transition-base hover:bg-accent/40",
                         !n.read && "bg-primary/[0.03]",
@@ -148,7 +107,7 @@ export function NotificationsPopover() {
         </ScrollArea>
 
         <div className="border-t border-border px-4 py-2">
-          <Button variant="ghost" size="sm" className="w-full text-xs">
+          <Button variant="ghost" size="sm" className="w-full text-xs" onClick={handleSeeAll}>
             Ver todas las notificaciones
           </Button>
         </div>

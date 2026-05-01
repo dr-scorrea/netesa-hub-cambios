@@ -6,6 +6,7 @@ import { FinanzasProvider } from "@/context/FinanzasContext";
 import { ClientsProvider } from "@/context/ClientsContext";
 import { UsersProvider } from "@/context/UsersContext";
 import { ProposalsProvider } from "@/context/ProposalsContext";
+import { NotificationsProvider } from "@/context/NotificationsContext";
 import { Outlet } from "react-router-dom";
 
 export function MainLayout() {
@@ -15,6 +16,7 @@ export function MainLayout() {
         <UsersProvider>
         <FinanzasProvider>
           <ProposalsProvider>
+          <NotificationsProvider>
           <SidebarProvider>
             <div className="flex min-h-screen w-full bg-gradient-subtle">
               <AppSidebar />
@@ -28,6 +30,7 @@ export function MainLayout() {
               </div>
             </div>
           </SidebarProvider>
+          </NotificationsProvider>
           </ProposalsProvider>
         </FinanzasProvider>
         </UsersProvider>
