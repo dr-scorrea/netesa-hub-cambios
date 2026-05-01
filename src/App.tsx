@@ -15,6 +15,7 @@ import Usuarios from "./pages/Usuarios";
 import Clientes from "./pages/Clientes";
 import ClienteConfig from "./pages/ClienteConfig";
 import ContactoForm from "./pages/ContactoForm";
+import Notificaciones from "./pages/Notificaciones";
 import { Configuracion } from "./pages/Placeholder";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound.tsx";
