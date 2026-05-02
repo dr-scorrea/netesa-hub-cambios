@@ -1,12 +1,12 @@
-import { Search, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { AppSwitcher } from "./AppSwitcher";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { NotificationsPopover } from "./NotificationsPopover";
 import { HelpPopover } from "./HelpPopover";
+import { GlobalSearch } from "./GlobalSearch";
 
 export function Topbar() {
   return (
@@ -24,13 +24,7 @@ export function Topbar() {
       </div>
 
       <div className="ml-auto flex items-center gap-2">
-        <div className="relative hidden lg:block">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder="Buscar leads, propuestas, planes..."
-            className="h-10 w-[280px] rounded-lg border-border bg-background pl-9"
-          />
-        </div>
+        <GlobalSearch />
         <HelpPopover />
         <NotificationsPopover />
         <Button asChild variant="ghost" size="icon" className="h-10 w-10" title="Cerrar sesión">
