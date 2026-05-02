@@ -4,8 +4,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Plus, Users, Filter, Mail, Phone } from "lucide-react";
-import { LEADS, type Lead, formatCurrency, STATUS_LABEL } from "@/data/crm";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Label } from "@/components/ui/label";
+import { Search, Plus, Users, Filter, Mail, Phone, X } from "lucide-react";
+import { LEADS, type Lead, type Currency, formatCurrency, STATUS_LABEL } from "@/data/crm";
 import { APPS } from "@/data/apps";
 import { useAppContext } from "@/context/AppContext";
 import { AppBadge } from "@/components/shared/AppBadge";
@@ -27,13 +29,44 @@ const Leads = () => {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [priorityFilter, setPriorityFilter] = useState<string>("all");
+  const [ownerFilter, setOwnerFilter] = useState<string>("all");
+  const [sourceFilter, setSourceFilter] = useState<string>("all");
+  const [currencyFilter, setCurrencyFilter] = useState<string>("all");
+  const [minValue, setMinValue] = useState<string>("");
+  const [maxValue, setMaxValue] = useState<string>("");
+  const [moreFiltersOpen, setMoreFiltersOpen] = useState(false);
   const [open, setOpen] = useState(false);
 
+  const owners = useMemo(() => Array.from(new Set(leads.map((l) => l.owner))).sort(), [leads]);
+  const sources = useMemo(() => Array.from(new Set(leads.map((l) => l.source))).sort(), [leads]);
+
+  const extraFilterCount =
+    (ownerFilter !== "all" ? 1 : 0) +
+    (sourceFilter !== "all" ? 1 : 0) +
+    (currencyFilter !== "all" ? 1 : 0) +
+    (minValue !== "" ? 1 : 0) +
+    (maxValue !== "" ? 1 : 0);
+
+  const resetExtraFilters = () => {
+    setOwnerFilter("all");
+    setSourceFilter("all");
+    setCurrencyFilter("all");
+    setMinValue("");
+    setMaxValue("");
+  };
+
   const filtered = useMemo(() => {
+    const min = minValue !== "" ? Number(minValue) : null;
+    const max = maxValue !== "" ? Number(maxValue) : null;
     return leads.filter((l) => {
       if (activeApp !== "all" && l.appId !== activeApp) return false;
       if (statusFilter !== "all" && l.status !== statusFilter) return false;
       if (priorityFilter !== "all" && l.priority !== priorityFilter) return false;
+      if (ownerFilter !== "all" && l.owner !== ownerFilter) return false;
+      if (sourceFilter !== "all" && l.source !== sourceFilter) return false;
+      if (currencyFilter !== "all" && l.currency !== currencyFilter) return false;
+      if (min !== null && !Number.isNaN(min) && l.estimatedValue < min) return false;
+      if (max !== null && !Number.isNaN(max) && l.estimatedValue > max) return false;
       if (search) {
         const q = search.toLowerCase();
         return (
@@ -44,7 +77,7 @@ const Leads = () => {
       }
       return true;
     });
-  }, [leads, activeApp, statusFilter, priorityFilter, search]);
+  }, [leads, activeApp, statusFilter, priorityFilter, ownerFilter, sourceFilter, currencyFilter, minValue, maxValue, search]);
 
   const handleCreate = (lead: Omit<Lead, "id" | "createdAt">) => {
     const newLead: Lead = {
@@ -132,9 +165,89 @@ const Leads = () => {
                 <SelectItem value="baja">Baja</SelectItem>
               </SelectContent>
             </Select>
-            <Button variant="outline" className="h-10">
-              <Filter className="mr-1.5 h-4 w-4" /> Más filtros
-            </Button>
+            <Popover open={moreFiltersOpen} onOpenChange={setMoreFiltersOpen}>
+              <PopoverTrigger asChild>
+                <Button variant="outline" className="h-10 relative">
+                  <Filter className="mr-1.5 h-4 w-4" /> Más filtros
+                  {extraFilterCount > 0 && (
+                    <span className="ml-2 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-[10px] font-bold text-primary-foreground">
+                      {extraFilterCount}
+                    </span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent align="end" className="w-[320px] p-4">
+                <div className="mb-3 flex items-center justify-between">
+                  <h4 className="text-sm font-semibold">Más filtros</h4>
+                  {extraFilterCount > 0 && (
+                    <Button variant="ghost" size="sm" className="h-7 px-2 text-xs" onClick={resetExtraFilters}>
+                      <X className="mr-1 h-3 w-3" /> Limpiar
+                    </Button>
+                  )}
+                </div>
+                <div className="space-y-3">
+                  <div className="space-y-1.5">
+                    <Label className="text-xs">Owner</Label>
+                    <Select value={ownerFilter} onValueChange={setOwnerFilter}>
+                      <SelectTrigger className="h-9"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">Todos</SelectItem>
+                        {owners.map((o) => (
+                          <SelectItem key={o} value={o}>{o}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label className="text-xs">Origen</Label>
+                    <Select value={sourceFilter} onValueChange={setSourceFilter}>
+                      <SelectTrigger className="h-9"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">Todos</SelectItem>
+                        {sources.map((s) => (
+                          <SelectItem key={s} value={s}>{s}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label className="text-xs">Moneda</Label>
+                    <Select value={currencyFilter} onValueChange={setCurrencyFilter}>
+                      <SelectTrigger className="h-9"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">Todas</SelectItem>
+                        <SelectItem value="PEN">PEN</SelectItem>
+                        <SelectItem value="USD">USD</SelectItem>
+                        <SelectItem value="CLP">CLP</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label className="text-xs">Valor estimado</Label>
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="number"
+                        placeholder="Mín."
+                        value={minValue}
+                        onChange={(e) => setMinValue(e.target.value)}
+                        className="h-9"
+                      />
+                      <span className="text-muted-foreground">–</span>
+                      <Input
+                        type="number"
+                        placeholder="Máx."
+                        value={maxValue}
+                        onChange={(e) => setMaxValue(e.target.value)}
+                        className="h-9"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-4 flex justify-end">
+                  <Button size="sm" onClick={() => setMoreFiltersOpen(false)}>Aplicar</Button>
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
 
           {filtered.length === 0 ? (
