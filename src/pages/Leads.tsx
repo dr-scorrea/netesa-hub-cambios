@@ -56,10 +56,17 @@ const Leads = () => {
   };
 
   const filtered = useMemo(() => {
+    const min = minValue !== "" ? Number(minValue) : null;
+    const max = maxValue !== "" ? Number(maxValue) : null;
     return leads.filter((l) => {
       if (activeApp !== "all" && l.appId !== activeApp) return false;
       if (statusFilter !== "all" && l.status !== statusFilter) return false;
       if (priorityFilter !== "all" && l.priority !== priorityFilter) return false;
+      if (ownerFilter !== "all" && l.owner !== ownerFilter) return false;
+      if (sourceFilter !== "all" && l.source !== sourceFilter) return false;
+      if (currencyFilter !== "all" && l.currency !== currencyFilter) return false;
+      if (min !== null && !Number.isNaN(min) && l.estimatedValue < min) return false;
+      if (max !== null && !Number.isNaN(max) && l.estimatedValue > max) return false;
       if (search) {
         const q = search.toLowerCase();
         return (
@@ -70,7 +77,7 @@ const Leads = () => {
       }
       return true;
     });
-  }, [leads, activeApp, statusFilter, priorityFilter, search]);
+  }, [leads, activeApp, statusFilter, priorityFilter, ownerFilter, sourceFilter, currencyFilter, minValue, maxValue, search]);
 
   const handleCreate = (lead: Omit<Lead, "id" | "createdAt">) => {
     const newLead: Lead = {
