@@ -29,7 +29,31 @@ const Leads = () => {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [priorityFilter, setPriorityFilter] = useState<string>("all");
+  const [ownerFilter, setOwnerFilter] = useState<string>("all");
+  const [sourceFilter, setSourceFilter] = useState<string>("all");
+  const [currencyFilter, setCurrencyFilter] = useState<string>("all");
+  const [minValue, setMinValue] = useState<string>("");
+  const [maxValue, setMaxValue] = useState<string>("");
+  const [moreFiltersOpen, setMoreFiltersOpen] = useState(false);
   const [open, setOpen] = useState(false);
+
+  const owners = useMemo(() => Array.from(new Set(leads.map((l) => l.owner))).sort(), [leads]);
+  const sources = useMemo(() => Array.from(new Set(leads.map((l) => l.source))).sort(), [leads]);
+
+  const extraFilterCount =
+    (ownerFilter !== "all" ? 1 : 0) +
+    (sourceFilter !== "all" ? 1 : 0) +
+    (currencyFilter !== "all" ? 1 : 0) +
+    (minValue !== "" ? 1 : 0) +
+    (maxValue !== "" ? 1 : 0);
+
+  const resetExtraFilters = () => {
+    setOwnerFilter("all");
+    setSourceFilter("all");
+    setCurrencyFilter("all");
+    setMinValue("");
+    setMaxValue("");
+  };
 
   const filtered = useMemo(() => {
     return leads.filter((l) => {
