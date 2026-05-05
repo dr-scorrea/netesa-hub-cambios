@@ -119,32 +119,6 @@ export function FacturaUploader({
           onChange={(e) => e.target.files && handleFiles(e.target.files)}
         />
       </div>
-
-      {processing.length > 0 && (
-        <div className="space-y-2 rounded-lg border border-border bg-card p-3">
-          <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-            <Sparkles className="h-3.5 w-3.5 text-primary" />
-            IA procesando ({processing.length})
-          </div>
-          {processing.map((it) => (
-            <div
-              key={it.id}
-              className="flex items-center gap-3 rounded-md border border-border bg-background/60 px-3 py-2"
-            >
-              <Loader2 className="h-4 w-4 shrink-0 animate-spin text-primary" />
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium">{it.name}</p>
-                <p className="text-xs text-muted-foreground">
-                  {(it.size / 1024).toFixed(1)} KB · Extrayendo datos…
-                </p>
-              </div>
-              <div className="h-1.5 w-24 overflow-hidden rounded-full bg-muted">
-                <div className="h-full w-full animate-pulse bg-gradient-primary" />
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 }
