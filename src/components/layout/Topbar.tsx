@@ -12,14 +12,14 @@ export function Topbar() {
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-border bg-card/80 px-4 backdrop-blur-md">
       <SidebarTrigger className="text-muted-foreground hover:text-foreground" />
-      <div className="hidden h-6 w-px bg-border md:block" />
+      <div className="hidden h-6 w-px bg-border lg:block" />
       <div className="flex items-center gap-2">
         <div className="flex h-8 w-8 items-center justify-center rounded-md bg-gradient-primary text-primary-foreground shadow-glow">
           <span className="text-sm font-bold">N</span>
         </div>
         <span className="text-base font-semibold tracking-tight inline">ERP Netesa</span>
       </div>
-      <div className="ml-2 hidden md:block">
+      <div className="ml-2 hidden lg:block">
         <AppSwitcher />
       </div>
 
@@ -36,7 +36,7 @@ export function Topbar() {
           <Avatar className="h-7 w-7">
             <AvatarFallback className="bg-gradient-primary text-xs font-semibold text-primary-foreground">LR</AvatarFallback>
           </Avatar>
-          <div className="hidden flex-col leading-tight md:flex">
+          <div className="hidden flex-col leading-tight lg:flex">
             <span className="text-xs font-semibold">Lucía Ramírez</span>
             <span className="text-[10px] text-muted-foreground">Comercial · Netesa</span>
           </div>
