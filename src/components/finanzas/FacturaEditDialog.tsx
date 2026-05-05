@@ -171,12 +171,9 @@ export function FacturaEditDialog({
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancelar
           </Button>
-          <Button variant="secondary" onClick={() => handleSave(false)}>
+          <Button onClick={handleSave} className="bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90">
+            <Save className="h-4 w-4" />
             Guardar cambios
-          </Button>
-          <Button onClick={() => handleSave(true)}>
-            <CheckCircle2 className="h-4 w-4" />
-            Enviar a aprobación
           </Button>
         </DialogFooter>
       </DialogContent>
