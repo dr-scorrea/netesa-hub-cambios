@@ -38,54 +38,50 @@ export function FacturaUploader({
         return;
       }
 
+      const PROVEEDORES_DEMO = [
+        { nombre: "Servicios Cloud Perú SAC", ruc: "20512345678", categoria: "Infraestructura" },
+        { nombre: "Estudio Contable Vargas", ruc: "20487654321", categoria: "Servicios profesionales" },
+        { nombre: "Suministros Lima EIRL", ruc: "20598765432", categoria: "Suministros oficina" },
+        { nombre: "Marketing Digital Andes", ruc: "20611223344", categoria: "Marketing" },
+        { nombre: "Telefónica del Perú", ruc: "20100017491", categoria: "Telecomunicaciones" },
+      ];
+
       for (const file of valid) {
         const tmpId = `FAC-${Date.now()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
-        setProcessing((p) => [...p, { id: tmpId, name: file.name, size: file.size }]);
 
-        // Extracción instantánea con datos placeholder (sin IA real)
-        const result = await simulateOCR(file);
+        // Generación instantánea de placeholders (sin IA real, sin delay)
+        const prov = PROVEEDORES_DEMO[Math.floor(Math.random() * PROVEEDORES_DEMO.length)];
+        const subtotal = Math.round((200 + Math.random() * 4800) * 100) / 100;
+        const igv = Math.round(subtotal * 0.18 * 100) / 100;
+        const total = Math.round((subtotal + igv) * 100) / 100;
 
         const placeholder: Factura = {
           id: tmpId,
-          proveedor: result.data.proveedor ?? "Proveedor sin identificar",
-          ruc: result.data.ruc ?? "—",
-          numDocumento: result.data.numDocumento ?? "—",
-          fechaEmision: result.data.fechaEmision ?? new Date().toISOString().slice(0, 10),
-          moneda: result.data.moneda ?? "PEN",
-          subtotal: result.data.subtotal ?? 0,
-          igv: result.data.igv ?? 0,
-          total: result.data.total ?? 0,
-          categoria: result.data.categoria ?? "Otros",
+          proveedor: prov.nombre,
+          ruc: prov.ruc,
+          numDocumento: `F00${1 + Math.floor(Math.random() * 3)}-${String(Math.floor(Math.random() * 999999)).padStart(6, "0")}`,
+          fechaEmision: new Date().toISOString().slice(0, 10),
+          moneda: "PEN",
+          subtotal,
+          igv,
+          total,
+          categoria: prov.categoria,
           estado: "revision",
           archivoNombre: file.name,
-          leidoPorIA: result.ok,
+          leidoPorIA: true,
           cargadoEn: new Date().toISOString(),
         };
         addFactura(placeholder);
 
-        const next: Partial<Factura> = {};
-        setProcessing((p) => p.filter((it) => it.id !== tmpId));
+        toast({
+          title: "Factura agregada",
+          description: `${file.name} — revisa y valida los datos.`,
+        });
 
-        if (result.ok) {
-          toast({
-            title: "Factura procesada por IA",
-            description: `${file.name} — revisa los datos extraídos.`,
-          });
-        } else {
-          toast({
-            title: "Extracción parcial",
-            description: `Algunos campos requieren ingreso manual: ${result.fallidos.join(", ")}.`,
-            variant: "destructive",
-          });
-        }
-
-        const finalFactura = { ...placeholder, ...next } as Factura;
-        onProcessed?.(finalFactura);
-        // Abrir validación inmediata solo para la primera del lote
-        if (file === valid[0]) onReadyToValidate?.(finalFactura);
+        if (file === valid[0]) onReadyToValidate?.(placeholder);
       }
     },
-    [addFactura, updateFactura, onProcessed, onReadyToValidate],
+    [addFactura, onReadyToValidate],
   );
 
   return (
