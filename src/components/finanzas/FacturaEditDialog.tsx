@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useFinanzas } from "@/context/FinanzasContext";
 import { CATEGORIAS, type Factura } from "@/data/finanzas";
-import { CheckCircle2, Sparkles } from "lucide-react";
+import { Pencil, Save } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 export function FacturaEditDialog({
   factura,
