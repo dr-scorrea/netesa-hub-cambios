@@ -31,6 +31,7 @@ import {
 import { FacturaUploader } from "@/components/finanzas/FacturaUploader";
 import { FacturaStatusBadge } from "@/components/finanzas/FacturaStatusBadge";
 import { FacturaEditDialog } from "@/components/finanzas/FacturaEditDialog";
+import { FacturaValidateDialog } from "@/components/finanzas/FacturaValidateDialog";
 import { useFinanzas } from "@/context/FinanzasContext";
 import { exportFacturasToExcel } from "@/lib/exportFacturas";
 import type { Factura, FacturaEstado } from "@/data/finanzas";
@@ -53,6 +54,7 @@ export default function Finanzas() {
   const [search, setSearch] = useState("");
   const [filterEstado, setFilterEstado] = useState<FacturaEstado | "all">("all");
   const [editing, setEditing] = useState<Factura | null>(null);
+  const [validating, setValidating] = useState<Factura | null>(null);
   const [toDelete, setToDelete] = useState<Factura | null>(null);
   const now = new Date();
   const [periodMonth, setPeriodMonth] = useState<number>(now.getMonth());
@@ -237,7 +239,7 @@ export default function Finanzas() {
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[420px_1fr]">
         <div className="space-y-4">
-          <FacturaUploader onReadyToValidate={(f) => setEditing(f)} />
+          <FacturaUploader onReadyToValidate={(f) => setValidating(f)} />
           <Card className="border-dashed bg-accent/30">
             <CardContent className="space-y-2 p-4 text-xs text-muted-foreground">
               <p className="flex items-center gap-2 font-medium text-foreground">
@@ -355,7 +357,7 @@ export default function Finanzas() {
                           </DropdownMenuItem>
                         )}
                         {(f.estado === "revision" || f.estado === "extraccion") && (
-                          <DropdownMenuItem onClick={() => setEditing(f)}>
+                          <DropdownMenuItem onClick={() => setValidating(f)}>
                             <CheckCircle2 className="h-4 w-4" />
                             Validar y enviar
                           </DropdownMenuItem>
@@ -379,6 +381,7 @@ export default function Finanzas() {
       </div>
 
       <FacturaEditDialog factura={editing} open={!!editing} onOpenChange={(o) => !o && setEditing(null)} />
+      <FacturaValidateDialog factura={validating} open={!!validating} onOpenChange={(o) => !o && setValidating(null)} />
 
       <ConfirmDeleteDialog
         open={!!toDelete}
