@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useFinanzas } from "@/context/FinanzasContext";
 import { CATEGORIAS, type Factura } from "@/data/finanzas";
-import { CheckCircle2, Sparkles } from "lucide-react";
+import { Pencil, Save } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 export function FacturaEditDialog({
   factura,
@@ -27,9 +28,12 @@ export function FacturaEditDialog({
   const recomputeTotal = (subtotal: number, igv: number) =>
     Math.round((subtotal + igv) * 100) / 100;
 
-  const handleSave = (markPendiente = false) => {
+  const handleSave = () => {
     updateFactura(form.id, form);
-    if (markPendiente) setEstado(form.id, "pendiente");
+    toast({
+      title: "Cambios guardados",
+      description: `${form.proveedor} actualizado correctamente.`,
+    });
     onOpenChange(false);
   };
 
@@ -37,16 +41,15 @@ export function FacturaEditDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            Verificar factura
-            {form.leidoPorIA && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
-                <Sparkles className="h-3 w-3" />
-                Datos por IA
-              </span>
-            )}
-          </DialogTitle>
-          <DialogDescription>{form.archivoNombre}</DialogDescription>
+          <div className="flex items-center gap-2">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <Pencil className="h-4 w-4" />
+            </div>
+            <div>
+              <DialogTitle>Editar factura</DialogTitle>
+              <DialogDescription>{form.archivoNombre}</DialogDescription>
+            </div>
+          </div>
         </DialogHeader>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -168,12 +171,9 @@ export function FacturaEditDialog({
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancelar
           </Button>
-          <Button variant="secondary" onClick={() => handleSave(false)}>
+          <Button onClick={handleSave} className="bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90">
+            <Save className="h-4 w-4" />
             Guardar cambios
-          </Button>
-          <Button onClick={() => handleSave(true)}>
-            <CheckCircle2 className="h-4 w-4" />
-            Enviar a aprobación
           </Button>
         </DialogFooter>
       </DialogContent>
