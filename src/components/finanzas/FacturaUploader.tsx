@@ -42,33 +42,28 @@ export function FacturaUploader({
         const tmpId = `FAC-${Date.now()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
         setProcessing((p) => [...p, { id: tmpId, name: file.name, size: file.size }]);
 
-        // create the row immediately in "extraccion" state
+        // Extracción instantánea con datos placeholder (sin IA real)
+        const result = await simulateOCR(file);
+
         const placeholder: Factura = {
           id: tmpId,
-          proveedor: "—",
-          ruc: "—",
-          numDocumento: "—",
-          fechaEmision: "",
-          moneda: "PEN",
-          subtotal: 0,
-          igv: 0,
-          total: 0,
-          categoria: "Otros",
-          estado: "extraccion",
+          proveedor: result.data.proveedor ?? "Proveedor sin identificar",
+          ruc: result.data.ruc ?? "—",
+          numDocumento: result.data.numDocumento ?? "—",
+          fechaEmision: result.data.fechaEmision ?? new Date().toISOString().slice(0, 10),
+          moneda: result.data.moneda ?? "PEN",
+          subtotal: result.data.subtotal ?? 0,
+          igv: result.data.igv ?? 0,
+          total: result.data.total ?? 0,
+          categoria: result.data.categoria ?? "Otros",
+          estado: "revision",
           archivoNombre: file.name,
-          leidoPorIA: false,
+          leidoPorIA: result.ok,
           cargadoEn: new Date().toISOString(),
         };
         addFactura(placeholder);
 
-        const result = await simulateOCR(file);
-
-        const next: Partial<Factura> = {
-          ...result.data,
-          estado: result.ok ? "revision" : "revision",
-          leidoPorIA: result.ok,
-        };
-        updateFactura(tmpId, next);
+        const next: Partial<Factura> = {};
         setProcessing((p) => p.filter((it) => it.id !== tmpId));
 
         if (result.ok) {
