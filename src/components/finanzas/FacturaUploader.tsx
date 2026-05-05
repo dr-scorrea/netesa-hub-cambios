@@ -1,29 +1,21 @@
 import { useCallback, useRef, useState } from "react";
-import { CloudUpload, FileText, Loader2, Sparkles } from "lucide-react";
+import { CloudUpload, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useFinanzas } from "@/context/FinanzasContext";
-import { simulateOCR, type Factura } from "@/data/finanzas";
+import { type Factura } from "@/data/finanzas";
 import { toast } from "@/hooks/use-toast";
-
-type ProcessingItem = {
-  id: string;
-  name: string;
-  size: number;
-};
 
 export function FacturaUploader({
   onProcessed,
   onReadyToValidate,
 }: {
   onProcessed?: (f: Factura) => void;
-  /** Se dispara con la factura ya extraída para abrir el modal de validación inmediato */
   onReadyToValidate?: (f: Factura) => void;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragOver, setDragOver] = useState(false);
-  const [processing, setProcessing] = useState<ProcessingItem[]>([]);
-  const { addFactura, updateFactura } = useFinanzas();
+  const { addFactura } = useFinanzas();
 
   const handleFiles = useCallback(
     async (files: FileList | File[]) => {
